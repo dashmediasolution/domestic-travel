@@ -1,11 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
+ 
 import { notFound } from "next/navigation";
-import {
-    CalendarDays,
-    ChevronRight,
-    Tag
-} from "lucide-react";
+import { CalendarDays, ChevronRight, Tag } from "lucide-react";
+ 
+ 
+ 
 
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
@@ -98,32 +99,106 @@ function prepareBlogContent(html: string) {
     };
 }
 
+ const SITE_URL = (
+    process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+).replace(/\/+$/, "");
+
 export async function generateMetadata({
     params,
-}: BlogPageProps) {
+}: BlogPageProps): Promise<Metadata> {
     const { slug } = await params;
 
     const blog = await prisma.blog.findUnique({
         where: {
             slug,
         },
+        select: {
+            id: true,
+            slug: true,
+            title: true,
+            excerpt: true,
+            metaTitle: true,
+            metaDescription: true,
+            featuredImage: true,
+            tags: true,
+        },
     });
 
     if (!blog) {
         return {
-            title: "Blog Not Found",
+            title: "Blog Not Found | Domestic Travel",
+            robots: {
+                index: false,
+                follow: false,
+            },
         };
     }
 
+    const title =
+        blog.metaTitle?.trim() ||
+        `${blog.title} | Domestic Travel`;
+
+    const description =
+        stripHtml(blog.metaDescription || blog.excerpt || "")
+            .slice(0, 160)
+            .trim() ||
+        `Read ${blog.title} and discover helpful travel tips with Domestic Travel.`;
+
+    const canonicalUrl =
+        `${SITE_URL}/blogs/${encodeURIComponent(blog.slug)}`;
+
+    const image = blog.featuredImage?.url;
+
     return {
-        title: blog.metaTitle || blog.title,
-        description:
-            blog.metaDescription ||
-            blog.excerpt ||
-            `Read ${blog.title} on Domestic Travel`,
+        title,
+        description,
+
+        ...(blog.tags.length > 0
+            ? { keywords: blog.tags }
+            : {}),
+
+        alternates: {
+            canonical: canonicalUrl,
+        },
+
+        robots: {
+            index: true,
+            follow: true,
+            googleBot: {
+                index: true,
+                follow: true,
+                "max-image-preview": "large",
+            },
+        },
+
+        openGraph: {
+            type: "article",
+            siteName: "Domestic Travel",
+            title,
+            description,
+            url: canonicalUrl,
+            locale: "en_IN",
+            ...(image
+                ? {
+                      images: [
+                          {
+                              url: image,
+                              alt: blog.title,
+                          },
+                      ],
+                  }
+                : {}),
+        },
+
+        twitter: {
+            card: image ? "summary_large_image" : "summary",
+            title,
+            description,
+            ...(image ? { images: [image] } : {}),
+        },
     };
 }
-
+ 
 export default async function BlogPage({
     params,
 }: BlogPageProps) {

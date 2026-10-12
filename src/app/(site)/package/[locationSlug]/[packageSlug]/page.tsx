@@ -1,4 +1,6 @@
+
 import type { Metadata } from "next";
+import { prisma } from "@/lib/prisma";
 import PackageDestination from "@/components/packagess/PackageDestination";
 
 type PageProps = {
@@ -13,8 +15,8 @@ type PackageSEO = {
     name?: string;
     slug?: string;
     metaTitle?: string | null;
-    seoDescription?: string | null;
-    keywords?: string[] | string | null;
+    metaDescription?: string | null;
+    keywords?: string[] | null;
     noIndex?: boolean;
     heroImage?: {
         url?: string | null;
@@ -25,39 +27,71 @@ type PackageSEO = {
 };
 
 const SITE_URL = (
-    process.env.NEXT_PUBLIC_SITE_URL ||
-    "https://yourdomain.com").replace(/\/$/, "");
+    process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+).replace(/\/+$/, "");
 
 async function getPackage(
     locationSlug: string,
     packageSlug: string
 ): Promise<PackageSEO | null> {
     try {
-        const response = await fetch(
-            `${SITE_URL}/api/packages/${encodeURIComponent(locationSlug)}/${encodeURIComponent(packageSlug)}`,
-            {
-                next: {
-                    revalidate: 3600,
+        const destination = await prisma.destination.findFirst({
+            where: {
+                slug: locationSlug,
+                isPublished: true,
+            },
+            select: {
+                id: true,
+            },
+        });
+
+        if (!destination) {
+            console.error("SEO: Destination not found:", locationSlug);
+            return null;
+        }
+
+        const packageData = await prisma.package.findFirst({
+            where: {
+                slug: packageSlug,
+                destinationId: destination.id,
+                isPublished: true,
+            },
+            select: {
+                id: true,
+                name: true,
+                slug: true,
+                metaTitle: true,
+                metaDescription: true,
+                keywords: true,
+                heroImage: true,
+                offers: {
+                    where: {
+                        isActive: true,
+                    },
+                    orderBy: {
+                        endDate: "asc",
+                    },
+                    select: {
+                        slug: true,
+                    },
                 },
-            }
-        );
+            },
+        });
 
-        if (!response.ok) {
+        if (!packageData) {
+            console.error(
+                "SEO: Package not found:",
+                locationSlug,
+                packageSlug
+            );
             return null;
         }
 
-        const result = await response.json();
-
-        if (!result.success || !result.data) {
-            return null;
-        }
-
-        return result.data as PackageSEO;
+        return packageData as unknown as PackageSEO;
     } catch (error) {
         console.error("Failed to fetch package SEO:", error);
         return null;
     }
-
 }
 
 function getPackageTitle(data: PackageSEO): string {
@@ -70,34 +104,28 @@ function getPackageTitle(data: PackageSEO): string {
 
 function getPackageDescription(data: PackageSEO): string {
     return (
-        data.seoDescription?.trim() ||
+        data.metaDescription?.trim() ||
         `Explore ${data.name || "this travel package"} and plan your next trip with Domestic Travel.`
     );
 }
 
+
 function getPackageKeywords(
     keywords: PackageSEO["keywords"]
 ): string[] {
-    if (Array.isArray(keywords)) {
-        return keywords
-            .filter(
-                (keyword): keyword is string =>
-                    typeof keyword === "string" &&
-                    keyword.trim().length > 0
-            )
-            .map((keyword) => keyword.trim());
+    if (!Array.isArray(keywords)) {
+        return [];
     }
 
-    if (typeof keywords === "string") {
-        return keywords
-            .split(",")
-            .map((keyword) => keyword.trim())
-            .filter(Boolean);
-    }
-
-    return [];
-
+    return keywords
+        .filter(
+            (keyword): keyword is string =>
+                typeof keyword === "string" &&
+                keyword.trim().length > 0
+        )
+        .map((keyword) => keyword.trim());
 }
+
 
 export async function generateMetadata({
     params,
@@ -167,7 +195,6 @@ export async function generateMetadata({
             ...(image ? { images: [image] } : {}),
         },
     };
-
 }
 
 export default async function PackagePage({
@@ -181,5 +208,4 @@ export default async function PackagePage({
             packageSlug={packageSlug}
         />
     );
-
 }

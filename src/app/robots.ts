@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const SITE_URL = "https://www.yourdomain.com";
+const NEXT_PUBLIC_SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
 
 export default function robots(): MetadataRoute.Robots {
     return {
@@ -11,9 +11,11 @@ export default function robots(): MetadataRoute.Robots {
                 "/admin/",
                 "/api/",
                 "/login/",
+                "/search-results",
+
             ],
         },
-        sitemap: `${SITE_URL}/sitemap.xml`,
-        host: SITE_URL,
+        sitemap: `${NEXT_PUBLIC_SITE_URL}/sitemap.xml`,
+        host: NEXT_PUBLIC_SITE_URL,
     };
 }

@@ -51,9 +51,10 @@ export default function BookingDialog({
 }: BookingDialogProps) {
     const [mounted, setMounted] = useState(false);
 
-    const [travellers, setTravellers] = useState(
-        "2 Adults, 1 Room"
-    );
+    const [adults, setAdults] = useState(2);
+    const [children, setChildren] = useState(0);
+
+    const travellers = `${adults} Adult${adults !== 1 ? "s" : ""}, ${children} Child${children !== 1 ? "ren" : ""}`;
 
     const [submitting, setSubmitting] = useState(false);
 
@@ -69,7 +70,7 @@ export default function BookingDialog({
         specialRequests: "",
     });
 
-    console.log(packageData,"real check")
+    console.log(packageData, "real check")
 
     useEffect(() => {
         setMounted(true);
@@ -150,7 +151,7 @@ export default function BookingDialog({
             if (!response.ok) {
                 throw new Error(
                     result.message ||
-                        "Failed to submit booking"
+                    "Failed to submit booking"
                 );
             }
 
@@ -167,7 +168,8 @@ export default function BookingDialog({
                 specialRequests: "",
             });
 
-            setTravellers("2 Adults, 1 Room");
+            setAdults(2);
+            setChildren(0);
         } catch (error) {
             console.error(
                 "Booking submission error:",
@@ -330,7 +332,7 @@ export default function BookingDialog({
                         <X className="h-5 w-5" />
                     </button>
 
-                    <div className="p-5 sm:p-7 lg:p-8">
+                    <div className="p-4 sm:p-5 lg:p-5">
                         {/* HEADER */}
 
                         <div className="pr-10">
@@ -338,20 +340,19 @@ export default function BookingDialog({
                                 Book Your Trip
                             </p>
 
-                            <h2 className="mt-1 font-serif text-2xl font-bold text-[#00383b] sm:text-3xl">
+                            <h2 className="mt-1 font-serif text-xl font-bold text-[#00383b] sm:text-2xl">
                                 Complete Your Booking
                             </h2>
 
-                            <p className="mt-2 max-w-[580px] text-sm leading-5 text-[#5e8183]">
-                                Fill in your details below and
-                                we'll get in touch with the best
+                            <p className="mt-1 max-w-[580px] text-xs leading-4 text-[#5e8183]">
+                                Fill in your details below and we'll get in touch with the best
                                 travel options for you!
                             </p>
                         </div>
 
                         <form
                             onSubmit={handleSubmit}
-                            className="mt-5 space-y-5"
+                            className="mt-3 space-y-3"
                         >
                             {/* 1. TRAVELLER DETAILS */}
 
@@ -377,7 +378,7 @@ export default function BookingDialog({
                                         required
                                     />
 
-                                    <div className="flex h-11 overflow-hidden rounded-lg border border-[#d7e2e2] focus-within:border-[#2fc2b0]">
+                                    <div className="flex h-10 overflow-hidden rounded-lg border border-[#d7e2e2] focus-within:border-[#2fc2b0]">
                                         <div className="flex items-center gap-1 border-r border-[#d7e2e2] px-3 text-sm text-[#00383b]">
                                             <Phone className="h-4 w-4" />
 
@@ -443,7 +444,7 @@ export default function BookingDialog({
                                     title="Travel Date"
                                 />
 
-                                <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                                <div className="mt-2 grid gap-2 sm:grid-cols-2">
                                     <Input
                                         icon={
                                             <CalendarDays />
@@ -484,71 +485,113 @@ export default function BookingDialog({
 
                             {/* 3. TRAVELLERS */}
 
-                            <section>
-                                <SectionTitle
-                                    number="3"
-                                    title="No. of Travellers"
-                                />
+                            <div className="mt-2 rounded-xl border border-[#d7e2e2] bg-white p-3  ">
+                                <div className="flex justify-between flex-col md:flex-row">
 
-                                <div className="relative mt-3">
-                                    <Users className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#17676b]" />
+                                <div className="flex items-center justify-between gap-4">
+                                    <div className="flex items-center gap-3">
+                                        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#effbf9] text-[#17676b]">
+                                            <Users className="h-5 w-5" />
+                                        </div>
 
-                                    <select
-                                        value={travellers}
-                                        onChange={(event) =>
-                                            setTravellers(
-                                                event.target
-                                                    .value
-                                            )
-                                        }
-                                        className="
-                                            h-11
-                                            w-full
-                                            appearance-none
-                                            rounded-lg
-                                            border
-                                            border-[#d7e2e2]
-                                            bg-white
-                                            pl-10
-                                            pr-10
-                                            text-sm
-                                            text-[#00383b]
-                                            outline-none
-                                            focus:border-[#2fc2b0]
-                                        "
-                                    >
-                                        <option>
-                                            2 Adults, 1 Room
-                                        </option>
+                                        <div>
+                                            <p className="text-sm font-semibold text-[#00383b]">
+                                                Adults
+                                            </p>
+                                            <p className="text-xs text-[#7b9698]">
+                                                Ages 13 or above
+                                            </p>
+                                        </div>
+                                    </div>
 
-                                        <option>
-                                            1 Adult, 1 Room
-                                        </option>
+                                    <div className="flex items-center gap-3">
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                setAdults((count) => Math.max(1, count - 1))
+                                            }
+                                            disabled={adults <= 1}
+                                            aria-label="Remove adult"
+                                            className="flex h-9 w-9 items-center justify-center rounded-full border border-[#d7e2e2] text-lg font-semibold text-[#00383b] transition hover:bg-[#effbf9] disabled:cursor-not-allowed disabled:opacity-40"
+                                        >
+                                            −
+                                        </button>
 
-                                        <option>
-                                            2 Adults, 2 Rooms
-                                        </option>
+                                        <span className="w-5 text-center text-sm font-semibold text-[#00383b]">
+                                            {adults}
+                                        </span>
 
-                                        <option>
-                                            3 Adults, 1 Room
-                                        </option>
-
-                                        <option>
-                                            4 Adults, 2 Rooms
-                                        </option>
-
-                                        <option>
-                                            2 Adults, 1 Child, 1 Room
-                                        </option>
-
-                                        <option>
-                                            2 Adults, 2 Children, 1 Room
-                                        </option>
-                                    </select>
-
-                                    <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#17676b]" />
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                setAdults((count) => Math.min(20, count + 1))
+                                            }
+                                            disabled={adults >= 20}
+                                            aria-label="Add adult"
+                                            className="flex h-9 w-9 items-center justify-center rounded-full border border-[#d7e2e2] text-lg font-semibold text-[#00383b] transition hover:bg-[#effbf9] disabled:cursor-not-allowed disabled:opacity-40"
+                                        >
+                                            +
+                                        </button>
+                                    </div>
                                 </div>
-                            </section>
+
+                                <div className="my-4 border-t border-[#edf1f1]" />
+
+                                <div className="flex items-center justify-between gap-4">
+                                    <div className="flex items-center gap-3">
+                                        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#effbf9] text-[#17676b]">
+                                            <User className="h-5 w-5" />
+                                        </div>
+
+                                        <div>
+                                            <p className="text-sm font-semibold text-[#00383b]">
+                                                Children
+                                            </p>
+                                            <p className="text-xs text-[#7b9698]">
+                                                Ages 0–12
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center gap-3">
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                setChildren((count) => Math.max(0, count - 1))
+                                            }
+                                            disabled={children <= 0}
+                                            aria-label="Remove child"
+                                            className="flex h-9 w-9 items-center justify-center rounded-full border border-[#d7e2e2] text-lg font-semibold text-[#00383b] transition hover:bg-[#effbf9] disabled:cursor-not-allowed disabled:opacity-40"
+                                        >
+                                            −
+                                        </button>
+
+                                        <span className="w-5 text-center text-sm font-semibold text-[#00383b]">
+                                            {children}
+                                        </span>
+
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                setChildren((count) => Math.min(20, count + 1))
+                                            }
+                                            disabled={children >= 20}
+                                            aria-label="Add child"
+                                            className="flex h-9 w-9 items-center justify-center rounded-full border border-[#d7e2e2] text-lg font-semibold text-[#00383b] transition hover:bg-[#effbf9] disabled:cursor-not-allowed disabled:opacity-40"
+                                        >
+                                            +
+                                        </button>
+                                    </div>
+                                </div>
+                                </div>
+
+                                <div className="mt-4 rounded-lg bg-[#f5faf9] px-3 py-2">
+                                    <p className="text-xs text-[#17676b]">
+                                        <span className="font-semibold">Selected:</span>{" "}
+                                        {travellers}
+                                    </p>
+                                </div>
+                            </div>
 
                             {/* 4. SPECIAL REQUESTS */}
 
@@ -604,12 +647,11 @@ export default function BookingDialog({
                                         px-4
                                         py-3
                                         text-sm
-                                        ${
-                                            submitMessage.includes(
-                                                "successfully"
-                                            )
-                                                ? "border-[#b8e5df] bg-[#effbf9] text-[#08756f]"
-                                                : "border-red-200 bg-red-50 text-red-600"
+                                        ${submitMessage.includes(
+                                        "successfully"
+                                    )
+                                            ? "border-[#b8e5df] bg-[#effbf9] text-[#08756f]"
+                                            : "border-red-200 bg-red-50 text-red-600"
                                         }
                                     `}
                                 >

@@ -7,14 +7,14 @@ import { Button } from "@/components/ui/button";
 
 import {
     BadgeCheck,
-     Headphones,
+    Headphones,
     Heart,
-     Leaf,
+    Leaf,
     MapPin,
     Mountain,
-     Send,
+    Send,
     ShieldCheck,
- } from "lucide-react";
+} from "lucide-react";
 
 
 const companyLinks = [
@@ -34,7 +34,7 @@ const companyLinks = [
 
 
 const supportLinks = [
-   
+
     {
         label: "Privacy Policy",
         href: "/privacy-policy",
@@ -43,7 +43,7 @@ const supportLinks = [
         label: "Terms & Conditions",
         href: "/terms-and-conditions",
     },
-     {
+    {
         label: "Cancelation & Refund Policy",
         href: "/cancellation-refund-policy",
     },
@@ -210,7 +210,7 @@ const travelCategories = [
    SOCIAL
 ========================================================= */
 
- 
+
 
 /* =========================================================
    FEATURES
@@ -282,7 +282,7 @@ export default function Footer() {
 
                         md:gap-12
 
-                        lg:grid-cols-[1.35fr_0.75fr_0.8fr_1.45fr_1.35fr]
+                        lg:grid-cols-[1.35fr_0.75fr_0.8fr_1.45fr]
                         lg:gap-0
                         lg:py-10
                     "
@@ -347,11 +347,11 @@ export default function Footer() {
                                 lg:leading-[21px]
                             "
                         >
-                           
-Explore domestic and international 
-tour packages designed to create 
-lifelong memories you'll cherish.
-.
+
+                            Explore domestic and international
+                            tour packages designed to create
+                            lifelong memories you'll cherish.
+                            .
                         </p>
 
 
@@ -458,104 +458,7 @@ lifelong memories you'll cherish.
                     </div>
 
 
-                    {/* NEWSLETTER */}
 
-                    <div
-                        className="
-                            lg:border-l
-                            lg:border-[#DCEDEE]
-                            lg:pl-7
-                        "
-                    >
-
-                        <h3
-                            className="
-                                text-[15px]
-                                font-bold
-                                text-[#15546A]
-                            "
-                        >
-                            Newsletter
-                        </h3>
-
-
-                        <p
-                            className="
-                                mt-2
-                                max-w-[260px]
-                                text-[12px]
-                                leading-[18px]
-                                text-[#668A94]
-
-                                sm:text-[13px]
-                            "
-                        >
-                            Subscribe to get exclusive travel
-                            <br className="hidden sm:block" />
-                            deals and updates.
-                        </p>
-
-
-                        <form
-                            className="
-                                mt-4
-                                flex
-                                h-10
-                                w-full
-                                max-w-[280px]
-                                overflow-hidden
-                                rounded-md
-                                border
-                                border-[#D9E9EA]
-                                bg-white
-                            "
-                            onSubmit={(event) =>
-                                event.preventDefault()
-                            }
-                        >
-
-                            <Input
-                                type="email"
-                                placeholder="Enter your email address"
-                                className="
-                                    h-full
-                                    min-w-0
-                                    flex-1
-                                    rounded-none
-                                    border-0
-                                    bg-transparent
-                                    px-3
-                                    text-[12px]
-                                    text-[#15546A]
-                                    shadow-none
-                                    focus-visible:ring-0
-                                    placeholder:text-[#91AEB5]
-                                "
-                            />
-
-                            <Button
-                                type="submit"
-                                size="icon"
-                                className="
-                                    h-10
-                                    w-10
-                                    shrink-0
-                                    rounded-none
-                                    bg-[#20BFAF]
-                                    text-white
-                                    shadow-none
-                                    hover:bg-[#159F92]
-                                "
-                            >
-                                <Send className="h-4 w-4" />
-                            </Button>
-
-                        </form>
-
-
-                        <PaymentMethods className="mt-6" />
-
-                    </div>
 
                 </div>
 
@@ -601,10 +504,9 @@ lifelong memories you'll cherish.
 
                                         lg:py-2
 
-                                        ${
-                                            index !== 0
-                                                ? "lg:border-l lg:border-[#DCEDEE]"
-                                                : ""
+                                        ${index !== 0
+                                            ? "lg:border-l lg:border-[#DCEDEE]"
+                                            : ""
                                         }
                                     `}
                                 >
@@ -730,17 +632,17 @@ lifelong memories you'll cherish.
 
                                         {index !==
                                             popularDestinations.length - 1 && (
-                                            <span
-                                                className="
+                                                <span
+                                                    className="
                                                     mx-2
                                                     text-[#B6CFD2]
 
                                                     sm:mx-2.5
                                                 "
-                                            >
-                                                |
-                                            </span>
-                                        )}
+                                                >
+                                                    |
+                                                </span>
+                                            )}
 
                                     </div>
                                 )
@@ -803,17 +705,17 @@ lifelong memories you'll cherish.
 
                                         {index !==
                                             travelCategories.length - 1 && (
-                                            <span
-                                                className="
+                                                <span
+                                                    className="
                                                     mx-2
                                                     text-[#B6CFD2]
 
                                                     sm:mx-2.5
                                                 "
-                                            >
-                                                |
-                                            </span>
-                                        )}
+                                                >
+                                                    |
+                                                </span>
+                                            )}
 
                                     </div>
                                 )
@@ -826,7 +728,7 @@ lifelong memories you'll cherish.
                 </div>
 
 
-           
+
 
                 {/* =====================================================
                     BOTTOM BAR
@@ -882,7 +784,7 @@ lifelong memories you'll cherish.
                         >
 
                             <Link
-                                href="/terms"
+                                href="/terms-and-conditions"
                                 className="hover:text-[#20BFAF]"
                             >
                                 Terms & Conditions
@@ -903,16 +805,7 @@ lifelong memories you'll cherish.
                                 |
                             </span>
 
-                            <Link
-                                href="/cookie-policy"
-                                className="hover:text-[#20BFAF]"
-                            >
-                                Cookie Policy
-                            </Link>
-
-                            <span className="text-[#C3D8DA]">
-                                |
-                            </span>
+                        
 
                             <Link
                                 href="/sitemap"

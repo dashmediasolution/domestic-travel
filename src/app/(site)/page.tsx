@@ -75,7 +75,7 @@ const thirdBanner: Banner[] = [
     redirectUrl: "/package/uttarakhand/kedarnath",
   },
 ];
-const SITE_URL = "https://www.yourdomain.com";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
 
 const structuredData = {
     "@context": "https://schema.org",

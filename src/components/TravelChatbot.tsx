@@ -3,6 +3,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import {
     Bot,
     ChevronRight,
@@ -47,7 +48,7 @@ type ChatMessage = {
 };
 
 const INITIAL_TEXT =
-    "Hi there! 👋 I'm WanderAI, your personal travel assistant. Tell me what kind of trip you're in the mood for today — be it adventure, relaxation, culture, or something else!";
+    "Hi there! 👋 I'm Tara, your personal travel assistant. Tell me what kind of trip you're in the mood for today — be it adventure, relaxation, culture, or something else!";
 
 const CATEGORY_STYLES: Record<string, { emoji: string; label: string }> = {
     adventure: { emoji: "🏔️", label: "Adventure" },
@@ -411,29 +412,29 @@ export default function TravelChatbot() {
     };
 
 
-const openPackage = (item: TravelPackage) => {
-    setOpen(false);
+    const openPackage = (item: TravelPackage) => {
+        setOpen(false);
 
-    if (item.hasOffer && item.offer?.slug) {
-        router.push(`/offers/package/${item.offer.slug}`);
-        return;
-    }
+        if (item.hasOffer && item.offer?.slug) {
+            router.push(`/offers/package/${item.offer.slug}`);
+            return;
+        }
 
-    const destinationSlug =
-        item.destination?.slug || item.locationSlug;
+        const destinationSlug =
+            item.destination?.slug || item.locationSlug;
 
-    const href =
-        item.href ||
-        (destinationSlug
-            ? `/package/${destinationSlug}/${item.slug}`
-            : `/package/${item.slug}`);
+        const href =
+            item.href ||
+            (destinationSlug
+                ? `/package/${destinationSlug}/${item.slug}`
+                : `/package/${item.slug}`);
 
-    if (!href.startsWith("/") || href.startsWith("//")) {
-        return;
-    }
+        if (!href.startsWith("/") || href.startsWith("//")) {
+            return;
+        }
 
-    router.push(href);
-};
+        router.push(href);
+    };
 
     const formatPrice = (price?: number | string | null) => {
         if (
@@ -501,10 +502,13 @@ const openPackage = (item: TravelPackage) => {
                 >
                     <span className="absolute inset-[1px] rounded-[21px] border border-white/20" />
 
-                    <Bot
-                        size={28}
-                        strokeWidth={1.8}
-                        className="relative transition-transform duration-300 group-hover:scale-110"
+                    <Image
+                        src="/images/aiChatbot.png"
+                        alt="Tara AI travel assistant"
+                        width={62}
+                        height={62}
+                        priority
+                        className="relative h-full w-full rounded-[22px] object-cover transition-transform duration-300 group-hover:scale-105"
                     />
 
                     <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full border-[2.5px] border-white bg-[#a3f56d]">
@@ -525,20 +529,22 @@ const openPackage = (item: TravelPackage) => {
                     className="fixed inset-x-2 bottom-2 z-50 flex h-[min(560px,calc(100dvh-16px))] flex-col overflow-hidden rounded-[20px] border border-[#e9e4d4] bg-[#fffdf6] shadow-[0_20px_70px_rgba(15,42,35,0.22)] sm:inset-x-auto sm:bottom-5 sm:right-5 sm:h-[min(580px,calc(100dvh-40px))] sm:w-[min(420px,calc(100vw-40px))] sm:rounded-[22px]"                >
                     <header className="flex shrink-0 items-center justify-between border-b border-[#f0ecdf] bg-[#fffdf6] px-4 py-3">
                         <div className="flex min-w-0 items-center gap-2.5">
-                            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#ffeaa0] text-[#07544e]">
-                                <span className="text-lg">🏝️</span>
+                            <div className="h-10 w-10 shrink-0 overflow-hidden rounded-full border border-[#d9eee8] bg-white">
+                                <Image
+                                    src="/images/aiChatbot.png"
+                                    alt="Tara"
+                                    width={40}
+                                    height={40}
+                                    className="h-full w-full object-cover"
+                                />
                             </div>
-
                             <div className="min-w-0">
                                 <h2 className="text-[13px] font-bold tracking-tight text-[#123d3b]">
-                                    WanderAI{" "}
-                                    <Sparkles
-                                        size={12}
-                                        className="inline text-[#e5ae24]"
-                                    />
+                                    Tara <Sparkles size={12} className="inline text-[#159b9c]" />
                                 </h2>
+
                                 <p className="mt-0.5 text-[10px] text-[#648078]">
-                                    Your Personal Travel Assistant
+                                    Your AI Travel Companion
                                 </p>
                             </div>
                         </div>
@@ -580,10 +586,15 @@ const openPackage = (item: TravelPackage) => {
                             <div key={message.id} className="w-full">
                                 {message.role === "assistant" ? (
                                     <div className="flex items-start gap-2">
-                                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#ffeb9d] text-[13px]">
-                                            🏝️
+                                        <div className="h-7 w-7 shrink-0 overflow-hidden rounded-full border border-[#d9eee8] bg-white">
+                                            <Image
+                                                src="/images/aiChatbot.png"
+                                                alt="Tara"
+                                                width={28}
+                                                height={28}
+                                                className="h-full w-full object-cover"
+                                            />
                                         </div>
-
                                         <div className="min-w-0 max-w-[88%] sm:max-w-[85%]">
                                             <div className="rounded-[15px] rounded-tl-[5px] border border-[#f0ecdf] bg-white px-3 py-2.5 shadow-[0_2px_8px_rgba(29,60,43,0.025)]">
                                                 <p className="whitespace-pre-wrap text-[11px] leading-[1.8] text-[#34584f] sm:text-[12px]">
@@ -592,7 +603,7 @@ const openPackage = (item: TravelPackage) => {
                                             </div>
 
                                             <p className="mt-1 px-1 text-[9px] text-[#a0a397]">
-                                                WanderAI · {message.time}
+                                                Tara · {message.time}
                                             </p>
                                         </div>
                                     </div>
@@ -731,7 +742,7 @@ const openPackage = (item: TravelPackage) => {
                         ))}
 
                         {showWelcomeTyping && (
-                            <TypingIndicator label="WanderAI is thinking..." />
+                            <TypingIndicator label="Tara is thinking..." />
                         )}
 
                         {loadingPackages && (

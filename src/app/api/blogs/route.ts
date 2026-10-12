@@ -24,8 +24,7 @@ export async function POST(request: Request) {
         ); const isPublished = formData.get("isPublished") === "true";
 
         const featuredImage = formData.get("featuredImage");
-        console.log(keywords, metaTitle, metaDescription, "SEO Data")
-        if (!title || !slug || !content) {
+         if (!title || !slug || !content) {
             return NextResponse.json(
                 {
                     success: false,
