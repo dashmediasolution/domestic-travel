@@ -138,7 +138,7 @@ export default function ExploreIndia() {
                     "
                 >
                     <Image
-                        src="/images/world map.png"
+                        src="/images/worldmap001.svg"
                         alt="World map"
                         fill
                         priority
