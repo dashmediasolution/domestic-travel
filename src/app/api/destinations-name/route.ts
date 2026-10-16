@@ -10,6 +10,7 @@ export async function GET() {
         const data = await prisma.destination.findMany({
             where: {
                 isPublished: true,
+                isFeatured: true
             },
             select: {
                 name: true,

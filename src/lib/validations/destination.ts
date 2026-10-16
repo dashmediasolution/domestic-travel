@@ -13,6 +13,7 @@ const attractionSchema = z.object({
             "Attraction name must be less than 100 characters"
         ),
 
+
     description: z
         .string()
         .trim()
@@ -69,6 +70,7 @@ export const destinationSchema = z.object({
             100,
             "Destination name must be less than 100 characters"
         ),
+parentId: z.string().optional().default(""),
 
     slug: z
         .string()
@@ -199,5 +201,5 @@ export const destinationSchema = z.object({
     isFeatured: z.boolean(),
 });
 
-export type DestinationFormValues =
-    z.infer<typeof destinationSchema>;
+export type DestinationFormInput = z.input<typeof destinationSchema>;
+export type DestinationFormValues = z.output<typeof destinationSchema>;

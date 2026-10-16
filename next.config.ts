@@ -1,4 +1,4 @@
- import type { NextConfig } from "next";
+import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
     reactCompiler: true,
@@ -14,7 +14,7 @@ const nextConfig: NextConfig = {
         "prisma",
     ],
 
- 
+
 
     images: {
         remotePatterns: [
@@ -26,9 +26,14 @@ const nextConfig: NextConfig = {
                 protocol: "https",
                 hostname: "images.unsplash.com",
             },
+            {
+                protocol: "https",
+                hostname: "images.openai.com",
+                pathname: "/static-rsc-4/**",
+            },
         ],
     },
 };
 
 export default nextConfig;
- 
+

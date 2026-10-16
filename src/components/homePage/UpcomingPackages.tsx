@@ -116,7 +116,7 @@ export default function UpcomingPackages() {
                             sm:tracking-[-0.6px]
                         "
                     >
-                        Browse Upcoming Packages
+                        Browse Trending Packages
                     </h2>
                 </div>
 

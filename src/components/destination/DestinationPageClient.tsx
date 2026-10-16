@@ -15,6 +15,7 @@ import Memories from "@/components/Memories";
 import WhyVisit from "@/components/WhyVisit";
 import ThingsToDo from "@/components/ThingsToDo";
 import DestinationGallery from "@/components/DestinationGallery";
+import ChildDestinationsCarousel from "./ChildDestination";
 import { Spinner } from "../ui/spinner";
 
 type DestinationPageClientProps = {
@@ -156,13 +157,21 @@ export default function DestinationPageClient({
                 </div>
             </section>
 
+<div className="flex w-full flex-col items-center justify-center gap-18">
+    {destination?.children?.length > 0 && (
+        <ChildDestinationsCarousel
+            destination={destination.name}
+            children={destination.children}
+        />
+    )}
+</div>
             <div className="flex w-full flex-col items-center justify-center gap-18">
-                {destination?.attractions?.length > 0 && (
+                {/* {destination?.attractions?.length > 0 && (
                     <AttractionsByDestination
                         destination={destination?.name}
                         attractions={destination?.attractions}
                     />
-                )}
+                )} */}
 
                 {destination?.activities?.length > 0 && (
                     <div className="w-[91%]">

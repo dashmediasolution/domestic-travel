@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
     destinationSchema,
+    type DestinationFormInput,
     type DestinationFormValues,
 } from "@/lib/validations/destination";
 
@@ -67,9 +68,21 @@ type WhyVisitItem = {
     description: string;
 };
 
+type ParentDestination = {
+    id: string;
+    name: string;
+    slug: string;
+};
+
 export default function CreateDestinationForm() {
     const [heroSource, setHeroSource] =
         useState<ImageSource>("upload");
+
+const [parentDestinations, setParentDestinations] =
+    useState<ParentDestination[]>([]);
+
+const [parentDestinationsLoading, setParentDestinationsLoading] =
+    useState(true);
 
     const [heroImage, setHeroImage] =
         useState<File | null>(null);
@@ -118,35 +131,63 @@ export default function CreateDestinationForm() {
     const [success, setSuccess] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const {
-        register,
-        handleSubmit,
-        setValue,
-        watch,
-        reset,
-        formState: { errors },
-    } = useForm<DestinationFormValues>({
-        resolver: zodResolver(destinationSchema),
+const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    reset,
+    formState: { errors },
+} = useForm<DestinationFormInput, any, DestinationFormValues>({
+    resolver: zodResolver(destinationSchema),
+    defaultValues: {
+        name: "",
+        parentId: "",
+        slug: "",
+        subtitle: "",
+        description: "",
+        location: "",
+        idealTrip: "",
+        budget: "",
+        activities: [],
+        bestTimeToVisit: [],
+        whyVisit: [],
+        attractions: [],
+        metaTitle: "",
+        metaDescription: "",
+        keywords: [],
+        isPublished: false,
+        isFeatured: false,
+    },
+});
 
-        defaultValues: {
-            name: "",
-            slug: "",
-            subtitle: "",
-            description: "",
-            location: "",
-            idealTrip: "",
-            budget: "",
-            activities: [],
-            bestTimeToVisit: [],
-            whyVisit: [],
-            attractions: [],
-            metaTitle: "",
-            metaDescription: "",
-            keywords: [],
-            isPublished: false,
-            isFeatured: false,
-        },
-    });
+useEffect(() => {
+    const fetchParentDestinations = async () => {
+        try {
+            const response = await fetch(
+                "/api/admin/destinations/parents"
+            );
+
+            if (!response.ok) {
+                throw new Error("Failed to load parent destinations");
+            }
+
+            const result = await response.json();
+
+            setParentDestinations(result.destinations ?? []);
+        } catch (error) {
+            console.error(
+                "Error fetching parent destinations:",
+                error
+            );
+            setError("Unable to load parent destinations.");
+        } finally {
+            setParentDestinationsLoading(false);
+        }
+    };
+
+    fetchParentDestinations();
+}, []);
 
     const onInvalid = (
         formErrors: FieldErrors<DestinationFormValues>
@@ -1026,7 +1067,10 @@ export default function CreateDestinationForm() {
                 "name",
                 data.name
             );
-
+formData.append(
+    "parentId",
+    data.parentId || ""
+);
             formData.append(
                 "slug",
                 data.slug
@@ -1287,6 +1331,53 @@ export default function CreateDestinationForm() {
                             </p>
                         )}
                     </div>
+
+<div className="space-y-2 md:col-span-2">
+    <Label htmlFor="parentId">
+        Parent Destination
+    </Label>
+
+    <select
+        id="parentId"
+        value={watch("parentId") ?? ""}
+        onChange={(event) => {
+            setValue(
+                "parentId",
+                event.target.value,
+                {
+                    shouldDirty: true,
+                    shouldValidate: true,
+                }
+            );
+        }}
+        disabled={parentDestinationsLoading}
+        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+    >
+        <option value="">
+            No Parent (Top-Level Destination)
+        </option>
+
+        {parentDestinations.map((destination) => (
+            <option
+                key={destination.id}
+                value={destination.id}
+            >
+                {destination.name}
+            </option>
+        ))}
+    </select>
+
+    <p className="text-xs text-muted-foreground">
+        Leave empty for a main destination, or select a
+        parent to create a child destination.
+    </p>
+
+    {errors.parentId && (
+        <p className="text-xs text-red-500">
+            {errors.parentId.message}
+        </p>
+    )}
+</div>
 
                     <div className="space-y-2 md:col-span-2">
                         <Label>

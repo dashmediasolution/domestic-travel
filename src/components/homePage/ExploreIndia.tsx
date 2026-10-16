@@ -93,7 +93,7 @@ export default function ExploreIndia() {
                             lg:tracking-[-1.5px]
                         "
                     >
-                        Explore India
+                        Explore World
                         <br />
                         on Map
                     </h2>

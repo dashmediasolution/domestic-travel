@@ -29,56 +29,73 @@ export async function GET(
 
         const now = new Date();
 
-        const destination = await prisma.destination.findUnique({
-            where: {
-                slug,
+      const destination = await prisma.destination.findUnique({
+    where: {
+        slug,
+    },
+
+    include: {
+children: {
+    where: {
+        isPublished: true,
+    },
+    select: {
+        id: true,
+        name: true,
+        slug: true,
+        subtitle: true,
+        location: true,
+        budget: true,
+        heroImage: true,
+        parentId: true,
+        isFeatured: true,
+    },
+    orderBy: {
+        name: "asc",
+    },
+},
+        attractions: {
+            orderBy: {
+                sortOrder: "asc",
             },
+        },
 
-            include: {
-                attractions: {
-                    orderBy: {
-                        sortOrder: "asc",
+        faqs: {
+            orderBy: {
+                sortOrder: "asc",
+            },
+        },
+
+        packages: {
+            orderBy: {
+                createdAt: "desc",
+            },
+            select: {
+                id: true,
+                name: true,
+                slug: true,
+                subtitle: true,
+                originalPrice: true,
+                heroImage: true,
+
+                offers: {
+                    select: {
+                        id: true,
+                        title: true,
+                        type: true,
+                        slug: true,
+                        endDate: true,
+                        badgeText: true,
+                        isActive: true,
                     },
-                },
-
-                faqs: {
-                    orderBy: {
-                        sortOrder: "asc",
-                    },
-                },
-
-                packages: {
                     orderBy: {
                         createdAt: "desc",
                     },
-
-                    select: {
-                        id: true,
-                        name: true,
-                        slug: true,
-                        subtitle: true,
-                        originalPrice: true,
-                        heroImage: true,
-
-                        offers: {
-                            select: {
-                                id: true,
-                                title: true,
-                                type: true,
-                                slug:true,
-                                endDate: true,
-                                badgeText: true,
-                                isActive: true,
-                            },
-
-                            orderBy: {
-                                createdAt: "desc",
-                            },
-                        },
-                    },
                 },
             },
-        });
+        },
+    },
+});
 
         if (!destination) {
             return NextResponse.json(

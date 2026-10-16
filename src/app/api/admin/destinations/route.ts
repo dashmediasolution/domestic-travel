@@ -220,7 +220,9 @@ export async function POST(
         const description = String(
             formData.get("description") || ""
         ).trim();
-
+const parentId = String(
+    formData.get("parentId") || ""
+).trim();
         const location = String(
             formData.get("location") || ""
         ).trim();
@@ -307,6 +309,7 @@ export async function POST(
                 ),
                 metaTitle,
                 metaDescription,
+                parentId,
                 keywords,
                 isPublished,
                 isFeatured,
@@ -510,7 +513,7 @@ for (const attraction of attractions) {
                                 description:
                                     data.description ||
                                     null,
-
+ parentId: parentId || null,
                                 location:
                                     data.location ||
                                     null,

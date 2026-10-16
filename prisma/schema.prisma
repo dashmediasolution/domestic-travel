@@ -73,10 +73,51 @@ model AdminUser {
     updatedAt DateTime @updatedAt
 }
 
+// model Destination {
+//     id   String @id @default(auto()) @map("_id") @db.ObjectId
+//     name String
+//     slug String @unique
+
+//     subtitle    String?
+//     description String?
+//     faqs        FAQ[]
+//     location    String?
+//     idealTrip   String?
+//     budget      String?
+
+//     activities      String[]
+//     bestTimeToVisit String[]
+
+//     heroImage PackageImage?
+//     gallery   PackageImage[]
+
+//     metaTitle       String?
+//     metaDescription String?
+//     keywords        String[]
+
+//     isPublished Boolean @default(false)
+//     isFeatured  Boolean @default(false)
+
+//     publishedAt DateTime?
+
+//     whyVisit Json?
+
+//     packages    Package[]
+//     attractions Attraction[]
+
+//     createdAt DateTime @default(now())
+//     updatedAt DateTime @updatedAt
+// }
+
 model Destination {
     id   String @id @default(auto()) @map("_id") @db.ObjectId
     name String
     slug String @unique
+
+    // NEW: Parent-child destination hierarchy
+    parentId String?       @db.ObjectId
+    parent   Destination?  @relation("DestinationHierarchy", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    children Destination[] @relation("DestinationHierarchy")
 
     subtitle    String?
     description String?
