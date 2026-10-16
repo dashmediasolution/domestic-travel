@@ -204,7 +204,9 @@ export async function PATCH(
         const slug = String(
             formData.get("slug") || ""
         );
-
+const parentId = String(
+    formData.get("parentId") || ""
+).trim();
         const subtitle = String(
             formData.get("subtitle") || ""
         );
@@ -274,6 +276,7 @@ export async function PATCH(
                 slug,
                 subtitle,
                 description,
+                parentId,
                 location,
                 idealTrip,
                 budget,
@@ -329,7 +332,99 @@ export async function PATCH(
                 { status: 400 }
             );
         }
+/*
+ * ------------------------------------------------
+ * VALIDATE PARENT DESTINATION
+ * ------------------------------------------------
+ */
 
+if (parentId) {
+    if (!isValidObjectId(parentId)) {
+        return NextResponse.json(
+            {
+                success: false,
+                message: "Invalid parent destination ID",
+            },
+            { status: 400 }
+        );
+    }
+
+    if (parentId === destinationId) {
+        return NextResponse.json(
+            {
+                success: false,
+                message: "A destination cannot be its own parent",
+            },
+            { status: 400 }
+        );
+    }
+
+    const parentDestination =
+        await prisma.destination.findUnique({
+            where: {
+                id: parentId,
+            },
+            select: {
+                id: true,
+                parentId: true,
+            },
+        });
+
+    if (!parentDestination) {
+        return NextResponse.json(
+            {
+                success: false,
+                message: "Parent destination not found",
+            },
+            { status: 404 }
+        );
+    }
+
+    // Prevent assigning a descendant as this destination's parent.
+    const visited = new Set<string>();
+    let currentParentId: string | null =
+        parentDestination.id;
+
+    while (currentParentId) {
+        if (currentParentId === destinationId) {
+            return NextResponse.json(
+                {
+                    success: false,
+                    message:
+                        "Invalid parent: this would create a destination hierarchy cycle",
+                },
+                { status: 400 }
+            );
+        }
+
+        if (visited.has(currentParentId)) {
+            return NextResponse.json(
+                {
+                    success: false,
+                    message:
+                        "The existing destination hierarchy contains a cycle",
+                },
+                { status: 400 }
+            );
+        }
+
+        visited.add(currentParentId);
+const currentParent: { parentId: string | null } | null =
+    await prisma.destination.findUnique({
+        where: {
+            id: currentParentId,
+        },
+        select: {
+            parentId: true,
+        },
+    });
+
+currentParentId = currentParent?.parentId ?? null;
+
+        currentParentId =
+            currentParent?.parentId ?? null;
+    }
+}
         /*
          * ------------------------------------------------
          * CHECK SLUG
@@ -800,8 +895,7 @@ export async function PATCH(
                                     data: {
                                         name:
                                             attraction.name,
-
-                                        description:
+                                         description:
                                             attraction.description,
 
                                         sortOrder:
@@ -895,7 +989,7 @@ export async function PATCH(
                                 name: data.name,
 
                                 slug: data.slug,
-
+   parentId: parentId || null,
                                 subtitle:
                                     data.subtitle ||
                                     null,

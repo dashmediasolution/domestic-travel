@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
     destinationSchema,
+    type DestinationFormInput,
     type DestinationFormValues,
 } from "@/lib/validations/destination";
 
@@ -72,11 +73,17 @@ type WhyVisitItem = {
     title: string;
     description: string;
 };
-
+type DestinationOption = {
+    id: string;
+    name: string;
+    slug: string;
+    parentId?: string | null;
+};
 type DestinationResponse = {
     id: string;
     name: string;
     slug: string;
+    parentId?: string | null;
     subtitle?: string | null;
     description?: string | null;
     location?: string | null;
@@ -111,7 +118,11 @@ export default function EditDestinationForm({
 }: Props) {
     const [heroImage, setHeroImage] =
         useState<File | null>(null);
+const [availableDestinations, setAvailableDestinations] =
+    useState<DestinationOption[]>([]);
 
+const [loadingParents, setLoadingParents] =
+    useState(false);
     const [heroPreview, setHeroPreview] =
         useState<string | null>(null);
 
@@ -167,35 +178,40 @@ export default function EditDestinationForm({
     const [loading, setLoading] =
         useState(false);
 
-    const {
-        register,
-        handleSubmit,
-        setValue,
-        watch,
-        reset,
-        formState: { errors },
-    } = useForm<DestinationFormValues>({
-        resolver: zodResolver(destinationSchema),
+const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    reset,
+    formState: { errors },
+} = useForm<
+    DestinationFormInput,
+    unknown,
+    DestinationFormValues
+>({
+    resolver: zodResolver(destinationSchema),
 
-        defaultValues: {
-            name: "",
-            slug: "",
-            subtitle: "",
-            description: "",
-            location: "",
-            idealTrip: "",
-            budget: "",
-            activities: [],
-            bestTimeToVisit: [],
-            whyVisit: [],
-            attractions: [],
-            metaTitle: "",
-            metaDescription: "",
-            keywords: [],
-            isPublished: false,
-            isFeatured: false,
-        },
-    });
+    defaultValues: {
+        name: "",
+        slug: "",
+        parentId: "",
+        subtitle: "",
+        description: "",
+        location: "",
+        idealTrip: "",
+        budget: "",
+        activities: [],
+        bestTimeToVisit: [],
+        whyVisit: [],
+        attractions: [],
+        metaTitle: "",
+        metaDescription: "",
+        keywords: [],
+        isPublished: false,
+        isFeatured: false,
+    },
+});
 
     const onInvalid = (
         formErrors: FieldErrors<DestinationFormValues>
@@ -336,7 +352,48 @@ export default function EditDestinationForm({
             .replace(/\s+/g, "-")
             .replace(/-+/g, "-");
     };
+const loadAvailableDestinations = async () => {
+    setLoadingParents(true);
 
+    try {
+        const response = await fetch(
+            "/api/admin/get-all-destinations?limit=50",
+            {
+                cache: "no-store",
+            }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                result.message || "Failed to load destinations"
+            );
+        }
+
+        const items: DestinationOption[] =
+            result.destinations ?? result.data ?? [];
+
+        setAvailableDestinations(
+            items.filter((item) => item.id !== destinationId)
+        );
+    } catch (error) {
+        setError(
+            error instanceof Error
+                ? error.message
+                : "Failed to load parent destinations"
+        );
+    } finally {
+        setLoadingParents(false);
+    }
+};
+
+useEffect(() => {
+    if (!destinationId) return;
+
+    loadDestination();
+    loadAvailableDestinations();
+}, [destinationId]);
     const handleNameChange = (
         event: React.ChangeEvent<HTMLInputElement>
     ) => {
@@ -582,64 +639,29 @@ export default function EditDestinationForm({
             const destination: DestinationResponse =
                 result.data;
 
-            reset({
-                name:
-                    destination.name ||
-                    "",
-                slug:
-                    destination.slug ||
-                    "",
-                subtitle:
-                    destination.subtitle ||
-                    "",
-                description:
-                    destination.description ||
-                    "",
-                location:
-                    destination.location ||
-                    "",
-                idealTrip:
-                    destination.idealTrip ||
-                    "",
-                budget:
-                    destination.budget ||
-                    "",
-                activities:
-                    destination.activities ||
-                    [],
-                bestTimeToVisit:
-                    destination.bestTimeToVisit ||
-                    [],
-                whyVisit:
-                    destination.whyVisit ||
-                    [],
-                attractions:
-                    destination.attractions?.map(
-                        (item) => ({
-                            name:
-                                item.name,
-                            description:
-                                item.description,
-                        })
-                    ) || [],
-                metaTitle:
-                    destination.metaTitle ||
-                    "",
-                metaDescription:
-                    destination.metaDescription ||
-                    "",
-                keywords:
-                    destination.keywords ||
-                    [],
-                isPublished:
-                    Boolean(
-                        destination.isPublished
-                    ),
-                isFeatured:
-                    Boolean(
-                        destination.isFeatured
-                    ),
-            });
+          reset({
+    name: destination.name || "",
+    slug: destination.slug || "",
+    parentId: destination.parentId || "",
+    subtitle: destination.subtitle || "",
+    description: destination.description || "",
+    location: destination.location || "",
+    idealTrip: destination.idealTrip || "",
+    budget: destination.budget || "",
+    activities: destination.activities || [],
+    bestTimeToVisit: destination.bestTimeToVisit || [],
+    whyVisit: destination.whyVisit || [],
+    attractions:
+        destination.attractions?.map((item) => ({
+            name: item.name,
+            description: item.description,
+        })) || [],
+    metaTitle: destination.metaTitle || "",
+    metaDescription: destination.metaDescription || "",
+    keywords: destination.keywords || [],
+    isPublished: Boolean(destination.isPublished),
+    isFeatured: Boolean(destination.isFeatured),
+});
 
             setActivities(
                 destination.activities ||
@@ -1407,7 +1429,10 @@ export default function EditDestinationForm({
                 "name",
                 data.name
             );
-
+formData.append(
+    "parentId",
+    data.parentId || ""
+);
             formData.append(
                 "slug",
                 data.slug
@@ -1749,7 +1774,44 @@ export default function EditDestinationForm({
                             </p>
                         )}
                     </div>
+<div className="space-y-2 md:col-span-2">
+    <Label htmlFor="parentId">
+        Parent Destination
+    </Label>
 
+    <select
+        id="parentId"
+        {...register("parentId")}
+        disabled={loadingParents}
+        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+    >
+        <option value="">
+            {loadingParents
+                ? "Loading destinations..."
+                : "None — Top-level destination"}
+        </option>
+
+        {availableDestinations.map((destination) => (
+            <option
+                key={destination.id}
+                value={destination.id}
+            >
+                {destination.name}
+            </option>
+        ))}
+    </select>
+
+    <p className="text-xs text-muted-foreground">
+        Select a parent to make this a child destination.
+        Leave empty to make it a top-level destination.
+    </p>
+
+    {errors.parentId && (
+        <p className="text-xs text-red-500">
+            {errors.parentId.message}
+        </p>
+    )}
+</div>
                     <div className="space-y-2 md:col-span-2">
                         <Label>
                             Subtitle
