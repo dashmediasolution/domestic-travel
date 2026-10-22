@@ -117,7 +117,11 @@ export default function ExploreIndia() {
                         experiences.
                     </p>
 
-                
+                    <Link href="/search-results">
+                        <Button className="p-2 my-2 cursor-pointer">
+                            Explore Now
+                        </Button>
+                    </Link>
                 </div>
 
                 {/* MAP */}

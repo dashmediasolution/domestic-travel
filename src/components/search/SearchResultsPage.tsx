@@ -642,7 +642,7 @@ function PackageCard({
                 </div>
             </div>
 
-            <div className="p-5">
+            <div className="px-5">
                 <h3 className="line-clamp-2 min-h-[52px] font-heading text-lg font-bold leading-6 text-[#00383b]">
                     {item.name}
                 </h3>

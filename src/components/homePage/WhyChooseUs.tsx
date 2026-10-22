@@ -270,7 +270,7 @@ export default function WhyChooseUs() {
                     "
                 >
                     <Image
-                        src="/images/phoneImage1.png"
+                        src="/images/phoneImage.webp"
                         alt="Wander India travel app"
                         fill
                         priority

@@ -45,7 +45,7 @@ export default function ChildDestinationsCarousel({
     <section className="flex w-full flex-col items-center gap-8 mb-10">
       <div className="flex w-[90%] flex-col gap-2">
         <h2 className="font-heading text-3xl font-semibold tracking-tight">
-          Top Places in {destination}
+          Top Destination in {destination}
         </h2>
 
         <p className="text-muted-foreground">

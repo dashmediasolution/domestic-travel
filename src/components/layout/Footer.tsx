@@ -83,10 +83,7 @@ const destinationLinks = [
         label: "Kashmir",
         href: "/package/kashmir",
     },
-    {
-        label: "Andaman & Nicobar",
-        href: "/package/andaman-nicobar",
-    },
+ 
     {
         label: "Meghalaya",
         href: "/destinations/meghalaya",
@@ -135,10 +132,7 @@ const popularDestinations = [
         label: "Nainital",
         href: "/package/uttarakhand/nainital",
     },
-    {
-        label: "Andaman & Nicobar",
-        href: "/package/andaman-nicobar",
-    },
+   
     {
         label: "Ladakh",
         href: "/destinations/ladakh",
@@ -197,7 +191,7 @@ const travelCategories = [
     },
     {
         label: "Adventure",
-        href: "/dcategory/adventure",
+        href: "/category/adventure",
     },
     {
         label: "Spiritual",

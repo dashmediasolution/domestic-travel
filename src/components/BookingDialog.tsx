@@ -201,6 +201,7 @@ export default function BookingDialog({
                 justify-center
                 bg-black/60
                 p-3
+                overflow-hidden
                 sm:p-5
             "
             onClick={onClose}
@@ -308,7 +309,7 @@ export default function BookingDialog({
 
                 {/* RIGHT FORM */}
 
-                <div className="relative min-w-0 flex-1 overflow-y-auto">
+                <div className="relative min-w-0 flex-1 overflow-y-auto overflow-x-hidden ">
                     <button
                         type="button"
                         onClick={onClose}
