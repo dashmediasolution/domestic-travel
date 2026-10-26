@@ -209,146 +209,126 @@ export default async function SitemapPage() {
     0,
   );
 
-  return (
-    <main className="min-h-screen bg-slate-50">
-      <section className="relative overflow-hidden bg-[#00383B] px-5 py-16 text-white sm:py-20">
-        <div className="absolute -right-20 -top-24 h-72 w-72 rounded-full bg-[#2FC2B0]/20 blur-3xl" />
-        <div className="absolute -bottom-28 -left-16 h-64 w-64 rounded-full bg-[#2FC2B0]/10 blur-3xl" />
+ 
+return (
+  <main className="min-h-screen bg-slate-50">
+    <section className="bg-[#00383B] px-5 py-12 text-white sm:py-16">
+      <div className="mx-auto max-w-6xl">
+        <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-sm text-[#8BE8DC]">
+          <FileText className="h-4 w-4" />
+          Website Navigation
+        </div>
 
-        <div className="relative mx-auto max-w-7xl">
-          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm text-[#8BE8DC]">
-            <FileText className="h-4 w-4" />
-            Website Navigation
+        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+          Explore WANDER-INDIA
+        </h1>
+
+        <p className="mt-3 max-w-2xl text-sm leading-6 text-white/70 sm:text-base">
+          Find destinations, holiday packages, travel offers, and helpful
+          travel guides in one place.
+        </p>
+
+        <div className="mt-6 flex flex-wrap gap-3">
+          <div className="rounded-lg border border-white/10 bg-white/10 px-4 py-3">
+            <p className="text-xl font-bold text-[#8BE8DC]">
+              {totalLinks}
+            </p>
+            <p className="text-xs text-white/65">Available links</p>
           </div>
 
-          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
-            HTML Sitemap
-          </h1>
-
-          <p className="mt-4 max-w-2xl text-base leading-7 text-white/75 sm:text-lg">
-            Find important pages on WANDER-INDIA, including destinations,
-            travel packages, special offers, and travel guides.
-          </p>
-
-          <div className="mt-8 flex flex-wrap gap-3">
-            <div className="rounded-xl border border-white/15 bg-white/10 px-5 py-3">
-              <p className="text-2xl font-bold text-[#8BE8DC]">
-                {totalLinks}
-              </p>
-              <p className="text-sm text-white/70">Website links</p>
-            </div>
-
-            <div className="rounded-xl border border-white/15 bg-white/10 px-5 py-3">
-              <p className="text-2xl font-bold text-[#8BE8DC]">
-                {sections.length}
-              </p>
-              <p className="text-sm text-white/70">Categories</p>
-            </div>
+          <div className="rounded-lg border border-white/10 bg-white/10 px-4 py-3">
+            <p className="text-xl font-bold text-[#8BE8DC]">
+              {sections.length}
+            </p>
+            <p className="text-xs text-white/65">Categories</p>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section className="px-5 py-12 sm:py-16">
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-10">
-            <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">
-              Explore Our Website
-            </h2>
-            <p className="mt-2 text-slate-600">
-              Browse pages by category to quickly find what you need.
-            </p>
-          </div>
+    <section className="px-5 py-10 sm:py-12">
+      <div className="mx-auto max-w-6xl">
+        <div className="mb-6">
+          <h2 className="text-xl font-bold text-slate-900">
+            Browse by category
+          </h2>
+          <p className="mt-1 text-sm text-slate-500">
+            Expand a category to view its pages.
+          </p>
+        </div>
 
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {sections.map((section) => {
-              const Icon = section.icon;
+        <div className="space-y-3">
+          {sections.map((section) => {
+            const Icon = section.icon;
 
-              return (
-                <div
-                  key={section.title}
-                  className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-[#2FC2B0]/60 hover:shadow-md sm:p-7"
-                >
-                  <div className="flex items-start gap-4">
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#2FC2B0]/10 text-[#168F83]">
-                      <Icon className="h-6 w-6" />
-                    </div>
-
-                    <div>
-                      <h3 className="text-lg font-bold text-slate-900">
-                        {section.title}
-                      </h3>
-                      <p className="mt-1 text-sm leading-6 text-slate-500">
-                        {section.description}
-                      </p>
-                    </div>
+            return (
+              <details
+                key={section.title}
+                open={section.title === "Main Pages"}
+                className="group overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm"
+              >
+                <summary className="flex cursor-pointer list-none items-center gap-3 px-4 py-4 transition hover:bg-slate-50 sm:px-5 [&::-webkit-details-marker]:hidden">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#2FC2B0]/10 text-[#168F83]">
+                    <Icon className="h-5 w-5" />
                   </div>
 
-                  <div className="my-5 h-px bg-slate-100" />
+                  <div className="min-w-0 flex-1">
+                    <h3 className="font-semibold text-slate-900">
+                      {section.title}
+                    </h3>
+                    <p className="mt-0.5 text-xs text-slate-500 sm:text-sm">
+                      {section.description}
+                    </p>
+                  </div>
 
+                  <span className="shrink-0 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600">
+                    {section.links.length}
+                  </span>
+
+                  <ArrowRight className="h-4 w-4 shrink-0 text-slate-400 transition-transform group-open:rotate-90" />
+                </summary>
+
+                <div className="border-t border-slate-100 px-4 py-3 sm:px-5">
                   {section.links.length > 0 ? (
-                    <ul className="space-y-3">
+                    <ul className="grid max-h-64 grid-cols-1 gap-x-6 gap-y-1 overflow-y-auto sm:grid-cols-2 lg:grid-cols-3">
                       {section.links.map((link) => (
                         <li key={link.href}>
                           <Link
                             href={link.href}
-                            className="group flex items-start gap-2 text-sm leading-6 text-slate-600 transition hover:text-[#168F83]"
+                            className="flex items-center gap-2 rounded-md px-2 py-2 text-sm text-slate-600 transition hover:bg-[#2FC2B0]/10 hover:text-[#087D72]"
                           >
-                            <ArrowRight className="mt-1 h-4 w-4 shrink-0 text-[#2FC2B0] transition-transform group-hover:translate-x-1" />
-                            <span>{link.title}</span>
+                            <ArrowRight className="h-3.5 w-3.5 shrink-0 text-[#2FC2B0]" />
+                            <span className="min-w-0 break-words">
+                              {link.title}
+                            </span>
                           </Link>
                         </li>
                       ))}
                     </ul>
                   ) : (
-                    <p className="text-sm text-slate-400">
+                    <p className="py-3 text-sm text-slate-400">
                       No published pages available yet.
                     </p>
                   )}
                 </div>
-              );
-            })}
-          </div>
-
-          <div className="mt-12 rounded-2xl border border-[#2FC2B0]/30 bg-[#2FC2B0]/5 p-6 sm:flex sm:items-center sm:justify-between sm:gap-6">
-            <div>
-              <h2 className="text-lg font-bold text-slate-900">
-                Planning your next trip?
-              </h2>
-              <p className="mt-2 text-sm leading-6 text-slate-600">
-                Discover destinations or contact our team for assistance.
-              </p>
-            </div>
-
-            <div className="mt-5 flex flex-wrap gap-3 sm:mt-0">
-              <Link
-                href="/search-results"
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#2FC2B0] px-5 py-3 text-sm font-semibold text-[#00383B] transition hover:bg-[#26AD9D]"
-              >
-                Explore Destinations
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-
-              <Link
-                href="/contact-us"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-[#2FC2B0] hover:text-[#168F83]"
-              >
-                <Mail className="h-4 w-4" />
-                Contact Us
-              </Link>
-            </div>
-          </div>
-
-          <p className="mt-8 text-center text-sm text-slate-500">
-            Looking for the XML sitemap for search engines?{" "}
-            <a
-              href={`${SITE_URL}/sitemap.xml`}
-              className="font-semibold text-[#168F83] underline-offset-4 hover:underline"
-            >
-              View XML Sitemap
-            </a>
-          </p>
+              </details>
+            );
+          })}
         </div>
-      </section>
-    </main>
-  );
+
+      
+        <p className="mt-6 text-center text-sm text-slate-500">
+          Looking for the XML sitemap?{" "}
+          <a
+            href={`${SITE_URL}/sitemap.xml`}
+            className="font-medium text-[#168F83] underline underline-offset-4 hover:text-[#00383B]"
+          >
+            View XML Sitemap
+          </a>
+        </p>
+      </div>
+    </section>
+  </main>
+);
+
 }

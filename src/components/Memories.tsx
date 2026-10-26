@@ -209,8 +209,7 @@ export default function Memories() {
                             <div className="flex size-7 shrink-0 items-center justify-center rounded-full border border-primary/70 sm:size-8">
                                 <CalendarCheck
                                     className="size-3.5 text-primary sm:size-4"
-                                    fill="currentColor"
-                                />
+                                 />
                             </div>
 
                             <span className="text-[8px] font-medium leading-tight text-white sm:text-[12px]">

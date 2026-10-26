@@ -254,8 +254,7 @@ export async function GET(request: NextRequest) {
                     },
                 ],
 
-                take: 8,
-            });
+             });
 
         const destinationIds =
             matchingDestinations.map(

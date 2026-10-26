@@ -502,7 +502,7 @@ export default function HeroSection() {
                             "
                         >
 
-                            sdsd    {activeDestination.description}
+                            {activeDestination.description}
 
                         </p>
                     </motion.div>

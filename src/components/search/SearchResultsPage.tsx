@@ -483,7 +483,7 @@ function DestinationCard({
             href={`/destinations/${destination.slug}`}
             className="group relative overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-neutral-200/80 transition duration-300 hover:-translate-y-1.5 hover:shadow-xl"
         >
-            <div className="relative h-[280px] overflow-hidden">
+            <div className="relative h-[160px] overflow-hidden">
                 {destination.image ? (
                     <Image
                         src={
@@ -596,7 +596,7 @@ function PackageCard({
             href={`/package/${item.destination.slug}/${item.slug}`}
             className="group overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-neutral-200/80 transition duration-300 hover:-translate-y-1.5 hover:shadow-xl"
         >
-            <div className="relative h-[230px] overflow-hidden">
+            <div className="relative h-[150px] overflow-hidden">
                 {item.image ? (
                     <Image
                         src={item.image}
@@ -642,12 +642,12 @@ function PackageCard({
                 </div>
             </div>
 
-            <div className="px-5">
-                <h3 className="line-clamp-2 min-h-[52px] font-heading text-lg font-bold leading-6 text-[#00383b]">
+            <div className="p-3">
+                <h3 className=" mb-3 font-heading text-lg font-bold leading-6 text-[#00383b]">
                     {item.name}
                 </h3>
 
-                <div className="mt-3 flex flex-wrap gap-2">
+                <div className=" flex flex-wrap gap-2">
                     {item.duration && (
                         <span className="inline-flex items-center gap-1.5 rounded-full bg-neutral-100 px-2.5 py-1 text-[11px] font-medium text-neutral-600">
                             <Clock3 className="size-3.5 text-primary" />

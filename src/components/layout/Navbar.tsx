@@ -467,66 +467,85 @@ export default function Navbar() {
 
                             {/* ================= DESTINATIONS ================= */}
 
+
+
                             <NavigationMenuItem>
                                 <NavigationMenuTrigger
                                     className="
-                                        bg-transparent
-                                        text-[15px]
-                                        font-medium
-                                        hover:bg-white/10
-                                        hover:text-primary
-                                        data-[state=open]:bg-white/10
-                                        data-[state=open]:text-primary
+                                    bg-transparent text-sm font-medium
+                                    hover:bg-white/10 hover:text-[#31C4AF]
+                                    data-[state=open]:bg-white/10
+                                    data-[state=open]:text-[#31C4AF]
                                     "
                                 >
-                                    <FiMapPin className="mr-2 h-5 w-5" />
+                                    <FiMapPin className="mr-1.5 h-4 w-4" />
                                     Destinations
                                 </NavigationMenuTrigger>
 
                                 <NavigationMenuContent>
-
-                                    <div className="w-[420px] p-3">
-
-                                        <div className="mb-3">
-                                            <h3 className="text-sm font-semibold">
-                                                Explore Destinations
+                                    <div className="w-[min(680px,calc(100vw-2rem))] p-3">
+                                        <div className="mb-2 flex items-center justify-between">
+                                            <h3 className="text-xs font-semibold text-slate-900">
+                                                All cities
                                             </h3>
+                                            <span className="text-[11px] text-slate-500">
+                                                {destination.length} cities
+                                            </span>
+                                        </div>
 
-                                            <p className="mt-1 text-xs text-muted-foreground">
-                                                Discover popular travel
-                                                destinations.
+                                        <div
+                                            className="
+                                            max-h-[250px] overflow-y-auto overscroll-contain pr-1.5
+                                            [scrollbar-width:thin]
+                                            [scrollbar-color:#31C4AF_#F1F5F9]
+                                            [&::-webkit-scrollbar]:w-1
+                                            [&::-webkit-scrollbar-track]:bg-slate-100
+                                            [&::-webkit-scrollbar-thumb]:rounded-full
+                                            [&::-webkit-scrollbar-thumb]:bg-[#31C4AF]
+                                            "
+                                        >
+                                            <div className="grid grid-cols-2 gap-1 sm:grid-cols-3 lg:grid-cols-4">
+                                                {destination.map((item: any) => (
+                                                    <Link
+                                                        key={item.slug}
+                                                        href={`/destinations/${item.slug}`}
+                                                        className="
+                                                                    group flex min-w-0 items-center gap-1.5
+                                                                    rounded-lg border border-slate-200 bg-white
+                                                                    px-2 py-2 transition-colors
+                                                                    hover:border-[#31C4AF]
+                                                                    hover:bg-[#31C4AF]/5
+                                                                "
+                                                    >
+                                                        <span
+                                                            className="
+                                                                flex h-6 w-6 shrink-0 items-center justify-center
+                                                                rounded-md bg-slate-100 text-slate-500
+                                                                group-hover:bg-[#31C4AF]/10
+                                                                group-hover:text-[#31C4AF]
+                                                                "
+                                                        >
+                                                            <FiMapPin className="h-3 w-3" />
+                                                        </span>
+
+                                                        <span className="truncate text-xs text-slate-700 group-hover:text-[#168F80]">
+                                                            {item.name}
+                                                        </span>
+                                                    </Link>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        <div className="mt-2 border-t border-slate-100 pt-2 text-center">
+                                            <p className="text-[10px] text-slate-500">
+                                                Select a city to explore its destination.
                                             </p>
                                         </div>
-
-                                        <div className="grid grid-cols-2 gap-1.5">
-
-                                            {destination.map((item: any) => (
-                                                <Link
-                                                    key={item.slug}
-                                                    href={`/destinations/${item.slug}`}
-                                                    className="
-            flex
-            items-center
-            gap-3
-            rounded-xl
-            p-3
-            transition-colors
-            hover:bg-muted
-        "
-                                                >
-
-                                                    <span className="text-sm font-medium">
-                                                        {item.name}
-                                                    </span>
-                                                </Link>
-                                            ))}
-
-                                        </div>
-
                                     </div>
-
                                 </NavigationMenuContent>
                             </NavigationMenuItem>
+
+
 
                         </NavigationMenuList>
                     </NavigationMenu>
@@ -811,7 +830,7 @@ export default function Navbar() {
 
                             </div>
 
- 
+
                             {/* ================= MOBILE DESTINATIONS ================= */}
 
                             <div className="mt-2 rounded-xl bg-gray-50 p-3">

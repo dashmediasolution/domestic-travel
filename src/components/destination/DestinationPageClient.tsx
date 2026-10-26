@@ -166,12 +166,12 @@ export default function DestinationPageClient({
     )}
 </div>
             <div className="flex w-full flex-col items-center justify-center gap-18">
-                {/* {destination?.attractions?.length > 0 && (
+                {destination?.attractions?.length > 0 && destination?.children?.length < 1 && (
                     <AttractionsByDestination
                         destination={destination?.name}
                         attractions={destination?.attractions}
                     />
-                )} */}
+                )}
 
                 {destination?.activities?.length > 0 && (
                     <div className="w-[91%]">

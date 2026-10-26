@@ -12,6 +12,7 @@ import {
     Send,
     User,
 } from "lucide-react";
+import Image from "next/image";
 
 export default function ContactInquiryForm() {
     const [loading, setLoading] = useState(false);
@@ -219,22 +220,24 @@ export default function ContactInquiryForm() {
 
                         {/* Bottom visual */}
                         <div className="mt-5 hidden items-end gap-2 lg:flex">
-                            <div className="h-[72px] w-[100px] rotate-[-6deg] overflow-hidden rounded-xl border-2 border-white bg-[#dcefed] shadow-sm">
-                                <div className="flex h-full items-center justify-center bg-gradient-to-br from-[#2FC2B0]/20 to-[#00383B]/10">
-                                    <MapPin
-                                        size={28}
-                                        className="text-[#2FC2B0]"
-                                    />
-                                </div>
+                            <div className="relative h-[72px] w-[100px] rotate-[-6deg] overflow-hidden rounded-xl border-2 border-white shadow-sm">
+                                <Image
+                                    src="/images/signup.png"
+                                    alt="Beautiful travel destination in India"
+                                    fill
+                                    sizes="100px"
+                                    className="object-cover"
+                                />
                             </div>
 
-                            <div className="h-[72px] w-[100px] rotate-[6deg] overflow-hidden rounded-xl border-2 border-white bg-[#dcefed] shadow-sm">
-                                <div className="flex h-full items-center justify-center bg-gradient-to-br from-[#00383B]/10 to-[#2FC2B0]/20">
-                                    <Headphones
-                                        size={28}
-                                        className="text-[#00383B]"
-                                    />
-                                </div>
+                            <div className="relative h-[72px] w-[100px] rotate-[6deg] overflow-hidden rounded-xl border-2 border-white shadow-sm">
+                                <Image
+                                    src="/images/behind.png"
+                                    alt="Scenic holiday destination"
+                                    fill
+                                    sizes="100px"
+                                    className="object-cover"
+                                />
                             </div>
                         </div>
                     </div>
